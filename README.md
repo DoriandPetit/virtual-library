@@ -61,6 +61,7 @@ Future features planned for development:
 - [ ] Reading Status (To Read, Currently Reading, Finished)
 - [ ] Shelves / Collections / Tags
 - [ ] Barcode Scanner via Camera
+
 - [ ] Docker Containerization
 - [ ] Import/Export (Goodreads, CSV)
 - [ ] Search & Filter functionality

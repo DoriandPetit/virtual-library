@@ -18,7 +18,8 @@ const db = new sqlite3.Database(dbPath, (err) => {
       isbn TEXT,
       description TEXT,
       rating INTEGER,
-      review TEXT
+      review TEXT,
+      status TEXT
     )`, (err) => {
             if (err) {
                 console.error('Error creating table: ' + err.message);
@@ -26,7 +27,28 @@ const db = new sqlite3.Database(dbPath, (err) => {
                 // Attempt to add columns for existing database
                 db.run("ALTER TABLE books ADD COLUMN rating INTEGER", () => { });
                 db.run("ALTER TABLE books ADD COLUMN review TEXT", () => { });
+                db.run("ALTER TABLE books ADD COLUMN status TEXT", () => { });
             }
+        });
+
+        // Create collections table
+        db.run(`CREATE TABLE IF NOT EXISTS collections (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      icon TEXT
+    )`, (err) => {
+            if (err) console.error('Error creating collections table: ' + err.message);
+        });
+
+        // Create book_collections join table
+        db.run(`CREATE TABLE IF NOT EXISTS book_collections (
+      book_id INTEGER,
+      collection_id INTEGER,
+      PRIMARY KEY (book_id, collection_id),
+      FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+      FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE CASCADE
+    )`, (err) => {
+            if (err) console.error('Error creating book_collections table: ' + err.message);
         });
     }
 });
